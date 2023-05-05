@@ -58,7 +58,7 @@ for global_var_name, info_dict in global_vars.items():
     if info_dict['calls']: 
         print("  Calls:") 
         for call_ea, call_instr_ea in info_dict['calls']: 
-            unc = idaapi.get_func(call_ea) 
+            func = idaapi.get_func(call_ea) 
             func_ea = func.start_ea 
             func_name = idaapi.get_func_name(func_ea) 
             print("    Function %s (called at: 0x%x)" % (func_name, call_instr_ea))
