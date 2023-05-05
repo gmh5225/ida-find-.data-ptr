@@ -6,7 +6,7 @@ A simple ida python script to find .data ptr
 
 
 ## Some discussions on UnknownCheats
-https://www.unknowncheats.me/forum/general-programming-and-reversing/582086-simple-ida-python-script-data-ptr.html#post3742968
+https://www.unknowncheats.me/forum/general-programming-and-reversing/582086-simple-ida-python-script-data-ptr.html
 
 ## TODO
 - Add additional pattern matching
