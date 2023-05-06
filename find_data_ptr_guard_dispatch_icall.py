@@ -33,15 +33,23 @@ for function_ea in idautils.Functions():
                 # Add the current instruction address to the list of references for the current global variable 
                 global_vars[global_var_name]['refs'].append(instruction_ea) 
 
-                # Check if the next instruction is a call instruction 
-                call_instr_ea = instruction_ea + idaapi.get_item_size(instruction_ea) 
-                call_ea = idc.get_operand_value(call_instr_ea, 0) 
-                called_func_name = idaapi.get_func_name(call_ea)
-                if idaapi.is_call_insn(call_instr_ea) and called_func_name == '_guard_dispatch_icall':
-                    # Add the current instruction address to the list of calls for the current global variable
-                    func = idaapi.get_func(call_ea)
-                    if func:
-                        global_vars[global_var_name]['calls'].append((call_ea, call_instr_ea))
+                # Traverse the next 10 instructions or until a call to '_guard_dispatch_icall' is found
+                next_ea = instruction_ea;
+                for _ in range(10):                
+                    # Get the address of the next instruction after the current one
+                    call_instr_ea = next_ea + idaapi.get_item_size(next_ea) 
+                    call_ea = idc.get_operand_value(call_instr_ea, 0)          
+                    # Check if the next instruction is a call instruction and the called function is '_guard_dispatch_icall'
+                    called_func_name = idaapi.get_func_name(call_ea)
+                    if idaapi.is_call_insn(call_instr_ea) and called_func_name == '_guard_dispatch_icall':
+                        # Add the current instruction address to the list of calls for the current global variable
+                        func = idaapi.get_func(call_ea)
+                        if func:
+                            global_vars[global_var_name]['calls'].append((call_ea, call_instr_ea))
+                        break
+
+                    # Update the value of next_ea with the address of the next instruction
+                    next_ea = call_instr_ea
 
 # Output the results to the console 
 for global_var_name, info_dict in global_vars.items(): 
