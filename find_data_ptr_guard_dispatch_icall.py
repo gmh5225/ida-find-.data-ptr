@@ -53,10 +53,20 @@ for function_ea in idautils.Functions():
 
 # Output the results to the console 
 for global_var_name, info_dict in global_vars.items(): 
-    if info_dict['calls'] and global_var_name != '__security_cookie': 
+    # Check if the global variable has any calls to the function '_guard_dispatch_icall' and is not '__security_cookie'
+    should_print = info_dict['calls'] and global_var_name != '__security_cookie'
+
+    if should_print:
+        # Print the name of the global variable
         print(".data ptr with _guard_dispatch_icall: %s" % global_var_name) 
+        
+        # Traverse the list of call locations for this global variable
         for call_ea, call_instr_ea in info_dict['calls']: 
+            # Get the function containing the call instruction
             func = idaapi.get_func(call_instr_ea) 
             func_ea = func.start_ea 
             func_name = idaapi.get_func_name(func_ea) 
+            
+            # Print the name of the function and the address where it was called
             print("    Function %s (called at: 0x%x)" % (func_name, call_instr_ea))
+
