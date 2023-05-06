@@ -53,7 +53,7 @@ for function_ea in idautils.Functions():
 
 # Output the results to the console 
 for global_var_name, info_dict in global_vars.items(): 
-    if info_dict['calls']: 
+    if info_dict['calls'] and global_var_name != '__security_cookie': 
         print(".data ptr with _guard_dispatch_icall: %s" % global_var_name) 
         for call_ea, call_instr_ea in info_dict['calls']: 
             func = idaapi.get_func(call_instr_ea) 
