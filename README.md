@@ -1,10 +1,10 @@
 # ida-find-.data-ptr
 A simple ida python script to find .data ptr 
 
-
+## Run ``find_data_ptr.py``
 ![image1](https://user-images.githubusercontent.com/13917777/236432757-892a014c-f5d4-4883-9b2c-42cea73d2d03.png)
 
-## Output _guard_dispatch_icall
+## Run ``find_data_ptr_guard_dispatch_icall.py``
 ```asm
 .data ptr with _guard_dispatch_icall: off_140C00A00
     Function HvlGetSharedPageVa (called at: 0x140236507)
