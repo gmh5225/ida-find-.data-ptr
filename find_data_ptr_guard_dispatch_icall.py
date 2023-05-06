@@ -34,15 +34,14 @@ for function_ea in idautils.Functions():
                 global_vars[global_var_name]['refs'].append(instruction_ea) 
 
                 # Check if the next instruction is a call instruction 
-                if idaapi.is_call_insn(instruction_ea + idaapi.get_item_size(instruction_ea)): 
-                    # Get the address being called 
-                    call_instr_ea = instruction_ea + idaapi.get_item_size(instruction_ea) 
-                    call_ea = idc.get_operand_value(call_instr_ea, 0) 
-                    # Check if the name of the function being called is '_guard_dispatch_icall'
-                    if idaapi.get_func_name(call_ea) == '_guard_dispatch_icall':
-                        # If the call is to a function, add it to the list of calls for the current global variable 
-                        if idaapi.get_func(call_ea): 
-                            global_vars[global_var_name]['calls'].append((call_ea, call_instr_ea)) 
+                call_instr_ea = instruction_ea + idaapi.get_item_size(instruction_ea) 
+                call_ea = idc.get_operand_value(call_instr_ea, 0) 
+                called_func_name = idaapi.get_func_name(call_ea)
+                if idaapi.is_call_insn(call_instr_ea) and called_func_name == '_guard_dispatch_icall':
+                    # Add the current instruction address to the list of calls for the current global variable
+                    func = idaapi.get_func(call_ea)
+                    if func:
+                        global_vars[global_var_name]['calls'].append((call_ea, call_instr_ea))
 
 # Output the results to the console 
 for global_var_name, info_dict in global_vars.items(): 
